@@ -1,2 +1,423 @@
-<h1>CafeApp#home</h1>
-<p>Find me in app/views/cafe_app/home.html.erb</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Cafe Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --dark: #2b1d0e;
+      --brown: #6b3f1f;
+      --gold: #c9a84c;
+      --light-brown: #9e6b3e;
+      --divider: #d9c9a8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--dark);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--cream);
+      position: relative;
+    }
+
+    /* Decorative border frame */
+    .border-frame {
+      border: 2px solid var(--brown);
+      padding: 2.5rem 2.5rem 3rem;
+      position: relative;
+    }
+
+    .border-frame::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--gold);
+      pointer-events: none;
+    }
+
+    /* Corner ornaments */
+    .corner {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .corner-tl { top: 3px; left: 3px; border-width: 2px 0 0 2px; }
+    .corner-tr { top: 3px; right: 3px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: 3px; left: 3px; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: 3px; right: 3px; border-width: 0 2px 2px 0; }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header-ornament {
+      font-size: 1.2rem;
+      color: var(--gold);
+      letter-spacing: 0.5em;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--brown);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+
+    .menu-title em {
+      font-style: italic;
+      color: var(--light-brown);
+    }
+
+    .header-rule {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.2rem 0 0;
+    }
+
+    .header-rule span {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    .header-rule .diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--brown);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--divider);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title::before {
+      content: '✦';
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
+    .subsection-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--light-brown);
+      margin: 1rem 0 0.4rem 0;
+    }
+
+    /* Menu item row */
+    .item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      gap: 0.5rem;
+    }
+
+    .item-name {
+      font-size: 0.92rem;
+      color: var(--dark);
+      letter-spacing: 0.02em;
+    }
+
+    .item-dots {
+      flex: 1;
+      border-bottom: 1px dotted var(--divider);
+      margin: 0 0.4rem;
+      position: relative;
+      top: -3px;
+    }
+
+    .item-price {
+      font-size: 0.88rem;
+      color: var(--brown);
+      white-space: nowrap;
+      font-weight: 400;
+    }
+
+    .item-price .size {
+      color: var(--light-brown);
+      font-size: 0.78rem;
+      margin-right: 0.15rem;
+    }
+
+    .item-price .sep {
+      color: var(--divider);
+      margin: 0 0.3rem;
+    }
+
+    /* Single-price items */
+    .item-price.single {
+      font-weight: 400;
+    }
+
+    /* Add-ons */
+    .addon {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 0.2rem 0 0.2rem 1rem;
+      gap: 0.5rem;
+    }
+
+    .addon-name {
+      font-size: 0.85rem;
+      color: var(--light-brown);
+      font-style: italic;
+    }
+
+    .addon-note {
+      font-size: 0.78rem;
+      color: var(--light-brown);
+      padding-left: 1rem;
+      margin-bottom: 0.2rem;
+      font-style: italic;
+    }
+
+    .addon-price {
+      font-size: 0.85rem;
+      color: var(--brown);
+    }
+
+    /* Divider between sections */
+    .section-divider {
+      text-align: center;
+      color: var(--gold);
+      font-size: 0.9rem;
+      letter-spacing: 0.4em;
+      margin: 1.5rem 0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--divider);
+    }
+
+    .footer p {
+      font-size: 0.78rem;
+      color: var(--light-brown);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="border-frame">
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+
+      <div class="header">
+        <span class="header-ornament">— ✦ —</span>
+        <div class="menu-title">The <em>Cafe</em></div>
+        <div class="menu-title" style="font-size:1.6rem; letter-spacing:0.2em; font-weight:400; margin-top:0.2rem;">MENU</div>
+        <div class="header-rule">
+          <span></span>
+          <div class="diamond"></div>
+          <div class="diamond" style="width:5px;height:5px;"></div>
+          <div class="diamond"></div>
+          <span></span>
+        </div>
+      </div>
+
+      <!-- Coffee & Tea -->
+      <div class="section">
+        <div class="section-title">Coffee &amp; Tea</div>
+
+        <div class="item">
+          <span class="item-name">Hot Coffee</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$2.50<span class="sep">|</span><span class="size">Lg</span>$3.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Cold Brew</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$3.50<span class="sep">|</span><span class="size">Lg</span>$4.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Chai Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.25<span class="sep">|</span><span class="size">Lg</span>$4.75</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Iced Chai Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$5.00<span class="sep">|</span><span class="size">Lg</span>$6.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Matcha Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.00<span class="sep">|</span><span class="size">Lg</span>$5.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Iced Matcha Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.50<span class="sep">|</span><span class="size">Lg</span>$5.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Café Au Lait</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$3.00<span class="sep">|</span><span class="size">Lg</span>$3.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Hot Chocolate</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$1.75<span class="sep">|</span><span class="size">Lg</span>$2.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">London Fog Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$2.00<span class="sep">|</span><span class="size">Lg</span>$3.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Iced London Fog</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$2.50<span class="sep">|</span><span class="size">Lg</span>$3.25</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Hot Tea</span>
+          <span class="item-dots"></span>
+          <span class="item-price single">$2.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Iced Tea</span>
+          <span class="item-dots"></span>
+          <span class="item-price single">$2.50</span>
+        </div>
+      </div>
+
+      <div class="section-divider">· · ·</div>
+
+      <!-- Hot Espresso -->
+      <div class="section">
+        <div class="section-title">Hot Espresso</div>
+        <div class="item">
+          <span class="item-name">Espresso Shot</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$1.00<span class="sep">|</span><span class="size">Lg</span>$2.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Americano</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$2.50<span class="sep">|</span><span class="size">Lg</span>$3.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.00<span class="sep">|</span><span class="size">Lg</span>$4.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Cappuccino</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.00<span class="sep">|</span><span class="size">Lg</span>$4.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Mocha Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.50<span class="sep">|</span><span class="size">Lg</span>$5.50</span>
+        </div>
+      </div>
+
+      <div class="section-divider">· · ·</div>
+
+      <!-- Iced Espresso -->
+      <div class="section">
+        <div class="section-title">Iced Espresso</div>
+        <div class="item">
+          <span class="item-name">Americano</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$3.00<span class="sep">|</span><span class="size">Lg</span>$3.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.50<span class="sep">|</span><span class="size">Lg</span>$5.00</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Mocha Latte</span>
+          <span class="item-dots"></span>
+          <span class="item-price"><span class="size">Sm</span>$4.75<span class="sep">|</span><span class="size">Lg</span>$5.75</span>
+        </div>
+      </div>
+
+      <div class="section-divider">· · ·</div>
+
+      <!-- Smoothies -->
+      <div class="section">
+        <div class="section-title">Smoothies</div>
+        <div class="item">
+          <span class="item-name">Sunrise Smoothie</span>
+          <span class="item-dots"></span>
+          <span class="item-price single">$4.50</span>
+        </div>
+        <div class="item">
+          <span class="item-name">Fruit Smoothie</span>
+          <span class="item-dots"></span>
+          <span class="item-price single">$5.50</span>
+        </div>
+        <div class="addon-note">Mango &nbsp;·&nbsp; Strawberry &nbsp;·&nbsp; Peach-Pear Apricot</div>
+
+        <div style="margin-top:0.6rem; padding-top:0.5rem; border-top: 1px dashed var(--divider);">
+          <div class="addon">
+            <span class="addon-name">+ Add Banana</span>
+            <span class="addon-price">$1.00</span>
+          </div>
+          <div class="addon">
+            <span class="addon-name">+ Add Protein Powder</span>
+            <span class="addon-price">$4.00</span>
+          </div>
+          <div class="addon-note">Whey or pea protein</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>Thank you for visiting &nbsp;✦&nbsp; We hope to see you again soon</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
