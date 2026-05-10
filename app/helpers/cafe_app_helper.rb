@@ -1,0 +1,2 @@
+module CafeAppHelper
+end
