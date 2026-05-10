@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root "cafe_app#home"
   get "cafe_app/home"
-  get "/" => "cafe_app#home"
+  get "cafe_app" => "cafe_app#home"
+  get "/home" => "cafe_app#home"
+
   # test
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
