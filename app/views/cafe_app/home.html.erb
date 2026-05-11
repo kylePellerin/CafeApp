@@ -471,7 +471,14 @@
   function addSelected(name, smP, lgP) {
     const size = selectedSizes[name];
     if (!size) { showToast('Choose Sm or Lg first'); return; }
+    
     addToCart(name, size, size === 'Sm' ? smP : lgP);
+
+    const key = name.replace(/[^a-zA-Z0-9]/g, '_');
+    document.getElementById('sm_' + key).classList.remove('selected');
+    document.getElementById('lg_' + key).classList.remove('selected');
+    
+    delete selectedSizes[name]; 
   }
 
   function addToCart(name, size, price) {
