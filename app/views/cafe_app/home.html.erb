@@ -323,18 +323,15 @@
     <!-- Coffee & Tea -->
     <div class="section">
       <div class="section-title">Coffee &amp; Tea</div>
-      <div class="item" data-name="Hot Coffee"        data-sm="2.50" data-lg="3.00"></div>
-      <div class="item" data-name="Cold Brew"         data-sm="3.50" data-lg="4.00"></div>
-      <div class="item" data-name="Chai Latte"        data-sm="4.25" data-lg="4.75"></div>
-      <div class="item" data-name="Iced Chai Latte"   data-sm="5.00" data-lg="6.00"></div>
-      <div class="item" data-name="Matcha Latte"      data-sm="4.00" data-lg="5.50"></div>
-      <div class="item" data-name="Iced Matcha Latte" data-sm="4.50" data-lg="5.50"></div>
-      <div class="item" data-name="Café Au Lait"      data-sm="3.00" data-lg="3.50"></div>
-      <div class="item" data-name="Hot Chocolate"     data-sm="1.75" data-lg="2.50"></div>
-      <div class="item" data-name="London Fog Latte"  data-sm="2.00" data-lg="3.00"></div>
-      <div class="item" data-name="Iced London Fog"   data-sm="2.50" data-lg="3.25"></div>
-      <div class="item" data-name="Hot Tea"           data-single="2.00"></div>
-      <div class="item" data-name="Iced Tea"          data-single="2.50"></div>
+      <% @coffee_and_tea.each do |item| %>
+        <div class="item" data-name="<%= item.name %>" 
+          <% if item.single_price.present? %>
+            data-single="<%= item.single_price %>"
+          <% else %>
+            data-sm="<%= item.price_sm %>" data-lg="<%= item.price_lg %>"
+          <% end %>
+        ></div>
+      <% end %>
     </div>
 
     <div class="section-divider">· · ·</div>
@@ -342,11 +339,15 @@
     <!-- Hot Espresso -->
     <div class="section">
       <div class="section-title">Hot Espresso</div>
-      <div class="item" data-name="Espresso Shot" data-sm="1.00" data-lg="2.00"></div>
-      <div class="item" data-name="Americano"     data-sm="2.50" data-lg="3.00"></div>
-      <div class="item" data-name="Latte"         data-sm="4.00" data-lg="4.50"></div>
-      <div class="item" data-name="Cappuccino"    data-sm="4.00" data-lg="4.50"></div>
-      <div class="item" data-name="Mocha Latte"   data-sm="4.50" data-lg="5.50"></div>
+      <% @hot_espresso.each do |item| %>
+        <div class="item" data-name="<%= item.name %>" 
+          <% if item.single_price.present? %>
+            data-single="<%= item.single_price %>"
+          <% else %>
+            data-sm="<%= item.price_sm %>" data-lg="<%= item.price_lg %>"
+          <% end %>
+        ></div>
+      <% end %>
     </div>
 
     <div class="section-divider">· · ·</div>
@@ -354,9 +355,15 @@
     <!-- Iced Espresso -->
     <div class="section">
       <div class="section-title">Iced Espresso</div>
-      <div class="item" data-name="Iced Americano"   data-sm="3.00" data-lg="3.50"></div>
-      <div class="item" data-name="Iced Latte"       data-sm="4.50" data-lg="5.00"></div>
-      <div class="item" data-name="Iced Mocha Latte" data-sm="4.75" data-lg="5.75"></div>
+      <% @iced_espresso.each do |item| %>
+        <div class="item" data-name="<%= item.name %>" 
+          <% if item.single_price.present? %>
+            data-single="<%= item.single_price %>"
+          <% else %>
+            data-sm="<%= item.price_sm %>" data-lg="<%= item.price_lg %>"
+          <% end %>
+        ></div>
+      <% end %>
     </div>
 
     <div class="section-divider">· · ·</div>
@@ -364,23 +371,27 @@
     <!-- Smoothies -->
     <div class="section">
       <div class="section-title">Smoothies</div>
-      <div class="item" data-name="Sunrise Smoothie" data-single="4.50"></div>
-      <div class="item" data-name="Fruit Smoothie"   data-single="5.50"></div>
+      <% @smoothies.each do |item| %>
+        <div class="item" data-name="<%= item.name %>" 
+          <% if item.single_price.present? %>
+            data-single="<%= item.single_price %>"
+          <% else %>
+            data-sm="<%= item.price_sm %>" data-lg="<%= item.price_lg %>"
+          <% end %>
+        ></div>
+      <% end %>
+      
       <div class="addon-note">Mango &nbsp;·&nbsp; Strawberry &nbsp;·&nbsp; Peach-Pear Apricot</div>
 
       <div style="margin-top:0.6rem;padding-top:0.5rem;border-top:1px dashed var(--divider);">
-        <div class="addon">
-          <span class="addon-name">+ Add Banana</span>
-          <span class="addon-dots"></span>
-          <span class="addon-price">$1.00</span>
-          <button class="addon-add-btn" onclick="addToCart('Add Banana', null, 1.00)">+ Add</button>
-        </div>
-        <div class="addon">
-          <span class="addon-name">+ Add Protein Powder</span>
-          <span class="addon-dots"></span>
-          <span class="addon-price">$4.00</span>
-          <button class="addon-add-btn" onclick="addToCart('Protein Powder', null, 4.00)">+ Add</button>
-        </div>
+        <% @addons.each do |addon| %>
+          <div class="addon">
+            <span class="addon-name">+ <%= addon.name %></span>
+            <span class="addon-dots"></span>
+            <span class="addon-price">$<%= sprintf('%.2f', addon.single_price) %></span>
+            <button class="addon-add-btn" onclick="addToCart('<%= addon.name %>', null, <%= addon.single_price %>)">+ Add</button>
+          </div>
+        <% end %>
         <div class="addon-note">Whey or pea protein</div>
       </div>
     </div>
