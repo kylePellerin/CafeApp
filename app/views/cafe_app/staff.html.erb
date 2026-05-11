@@ -121,6 +121,9 @@
                 <span>
                   <span class="qty"><%= item.quantity %>x</span> 
                   <%= item.size %> <%= item.product.name %>
+                  <% if item.notes.present? %>
+                    <div style="font-size:0.78rem; color:var(--gold); margin-top:0.2rem;">📝 <%= item.notes %></div>
+                  <% end %>
                 </span>
               </li>
             <% end %>

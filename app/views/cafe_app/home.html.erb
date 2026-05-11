@@ -516,6 +516,15 @@
         <div class="cart-item-info">
           <div class="cart-item-name">${item.name}</div>
           ${item.size ? `<div class="cart-item-sub">${item.size}</div>` : ''}
+          <input 
+          type="text" 
+          placeholder="Any notes? (e.g. oat milk, no sugar)"
+          value="${item.notes || ''}"
+          onchange="updateNotes(${idx}, this.value)"
+          style="margin-top:0.4rem; width:100%; font-size:0.78rem; padding:0.3rem 0.5rem;
+               border:1px solid var(--divider); border-radius:2px; 
+               font-family:'Lato',sans-serif; color:var(--dark); background:var(--cream);"
+        />
         </div>
         <div class="cart-item-qty">
           <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>

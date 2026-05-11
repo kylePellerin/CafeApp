@@ -25,7 +25,8 @@ class CafeAppController < ApplicationController
             order: order,
             product: product,
             size: item[:size],
-            quantity: item[:qty]
+            quantity: item[:qty],
+            notes: item[:notes]
           )
         end
       end
