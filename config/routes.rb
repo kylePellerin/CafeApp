@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get "/home" => "cafe_app#home"
   get "/order" => "cafe_app#home"
   post "/place_order", to: "cafe_app#create_order"
+  get "/staff", to: "cafe_app#staff", as: "staff"
+  patch "/orders/:id/complete", to: "cafe_app#complete_order", as: "complete_order"
 
 
   # test

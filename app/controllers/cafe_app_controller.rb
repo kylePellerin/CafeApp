@@ -33,4 +33,17 @@ class CafeAppController < ApplicationController
 
     render json: { success: true, order_id: order.id }
   end
+
+  def staff
+    @active_orders = Order.where(status: "In Progress")
+                          .order(created_at: :asc)
+                          .includes(order_items: :product)
+  end
+
+  def complete_order
+    order = Order.find(params[:id])
+    order.update(status: "Completed")
+
+    redirect_to staff_path, notice: "Order for #{order.customer_name} is ready!"
+  end
 end
