@@ -540,16 +540,60 @@
   }
 
   function placeOrder() {
+    // 1. Change the modal to ask for their name
     document.getElementById('modalBody').innerHTML = `
-      <div class="confirmation">
-        <div class="check">☕</div>
-        <h2>Order Placed!</h2>
-        <p>Thank you! Your order is being prepared.<br>We'll have it ready for you shortly.</p>
+      <div class="checkout-form" style="text-align: center; padding: 2rem 1rem;">
+        <h2 style="font-family: 'Playfair Display', serif; color: var(--brown); margin-bottom: 1rem;">Who is this order for?</h2>
+        <input type="text" id="customerName" placeholder="Enter your name" style="padding: 0.6rem; width: 80%; border: 1px solid var(--divider); border-radius: 2px; font-family: 'Lato', sans-serif; font-size: 1rem;">
       </div>`;
+    
+    // Change the button to trigger our new submit logic
     document.getElementById('modalFooter').innerHTML =
-      `<button class="place-order-btn" onclick="newOrder()">Start New Order</button>`;
-    cart = []; selectedSizes = {};
-    updateCartBar();
+      `<button class="place-order-btn" onclick="submitOrder()">Submit Order</button>`;
+  }
+
+  function submitOrder() {
+    const nameInput = document.getElementById('customerName').value;
+    
+    if (!nameInput.trim()) {
+      showToast("Please enter your name!");
+      return;
+    }
+
+    const orderData = {
+      customer_name: nameInput,
+      items: cart,
+      total: cart.reduce((s, i) => s + i.price * i.qty, 0)
+    };
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    fetch('/place_order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+      },
+      body: JSON.stringify(orderData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('modalBody').innerHTML = `
+        <div class="confirmation">
+          <div class="check">☕</div>
+          <h2>Order Placed, ${nameInput}!</h2>
+          <p>Thank you! We're sending this to the barista right now.</p>
+        </div>`;
+      document.getElementById('modalFooter').innerHTML =
+        `<button class="place-order-btn" onclick="newOrder()">Start New Order</button>`;
+      
+      cart = []; selectedSizes = {};
+      updateCartBar();
+    })
+    .catch(error => {
+      console.error("Error saving order:", error);
+      showToast("Something went wrong saving to the database!");
+    });
   }
 
   function newOrder() {
