@@ -610,6 +610,10 @@
     document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
   }
 
+  function updateNotes(idx, value) {
+  cart[idx].notes = value;
+  }
+
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
